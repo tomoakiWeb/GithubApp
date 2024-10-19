@@ -23,4 +23,3 @@ public struct HomeContentView: View {
 #Preview {
     HomeContentView()
 }
-
