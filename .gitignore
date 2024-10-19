@@ -2,6 +2,8 @@ DerivedData/
 *.xcuserstate
 *.xcworkspace
 
+.swiftpm/xcode/xcuserdata/
+
 .DS_Store
 
 *.app
