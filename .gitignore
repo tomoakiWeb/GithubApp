@@ -1,0 +1,11 @@
+DerivedData/
+*.xcuserstate
+*.xcworkspace
+
+.DS_Store
+
+*.app
+*.exe
+*.dll
+
+.env
