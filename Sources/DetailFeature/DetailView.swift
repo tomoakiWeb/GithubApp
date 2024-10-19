@@ -9,3 +9,7 @@ public struct DetailView: View {
             .navigationTitle("Detail")
     }
 }
+
+#Preview {
+    DetailView()
+}

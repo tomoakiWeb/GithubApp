@@ -16,7 +16,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "HomeFeature"),
+            name: "HomeFeature",
+        dependencies: [
+            "DetailFeature"
+        ]),
         .target(
             name: "DetailFeature")
     ]
