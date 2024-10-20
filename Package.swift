@@ -22,7 +22,8 @@ let package = Package(
         .target(
             name: "HomeFeature",
         dependencies: [
-            "DetailFeature"
+            "DetailFeature",
+            .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
         ]),
         .target(
             name: "DetailFeature")
