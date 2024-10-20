@@ -5,7 +5,9 @@ import HomeFeature
 struct GithubApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeContentView()
+            HomeView(store: .init(initialState: .init()) {
+                HomeReducer()
+            })
         }
     }
 }
