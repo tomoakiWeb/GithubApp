@@ -14,6 +14,10 @@ let package = Package(
             name: "DetailFeature",
             targets: ["DetailFeature"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.15.0"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.4.0"),
+    ],
     targets: [
         .target(
             name: "HomeFeature",
