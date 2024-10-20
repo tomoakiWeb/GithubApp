@@ -1,21 +1,17 @@
 import ComposableArchitecture
+import Foundation
 
 @Reducer
-public struct HomeReducer: Reducer, Sendable {
-    
+public struct UserItemReducer: Reducer, Sendable {
     @ObservableState
-    public struct State: Equatable, Sendable {
-        var items = IdentifiedArrayOf<UserItemReducer.State>()
-        var query = ""
-        
+    public struct State: Equatable, Identifiable, Sendable {
+        public var id: Int { Int.random(in: 1...1000) }
         public init() {}
     }
-    
+
     public enum Action: BindableAction, Sendable {
         case binding(BindingAction<State>)
     }
-    
-    public init() {}
 
     public var body: some ReducerOf<Self> {
         BindingReducer()
