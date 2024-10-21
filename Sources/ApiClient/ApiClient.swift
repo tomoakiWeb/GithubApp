@@ -1,8 +1,9 @@
 import Foundation
 
 public final class ApiClient: Sendable {
-    public static let shared = ApiClient(session: .shared)
     private let session: URLSession
+    public static let liveValue = ApiClient(session: .shared)
+    public static let testValue = ApiClient(session: .init(configuration: .ephemeral))
 
     public init(session: URLSession = .shared) {
         self.session = session
