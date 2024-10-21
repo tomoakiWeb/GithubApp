@@ -5,7 +5,7 @@ public protocol BaseRequest: Sendable {
     var url: URL { get }
     var method: String { get }
     var headers: [String: String] { get }
-    var queryParameters: [String: Any]? { get }
+    var queryParameters: [String: String]? { get }
     var decoder: JSONDecoder { get }
 
     func buildURLRequest() -> URLRequest
