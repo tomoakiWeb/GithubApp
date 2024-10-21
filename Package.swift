@@ -13,6 +13,9 @@ let package = Package(
         .library(
             name: "DetailFeature",
             targets: ["DetailFeature"]),
+        .library(
+            name: "ApiClient",
+            targets: ["ApiClient"]),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.15.0"),
@@ -26,6 +29,10 @@ let package = Package(
             .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
         ]),
         .target(
-            name: "DetailFeature")
+            name: "DetailFeature"
+        ),
+        .target(
+            name: "ApiClient"
+        )
     ]
 )
