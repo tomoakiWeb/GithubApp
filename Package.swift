@@ -42,6 +42,7 @@ let package = Package(
             name: "GithubClient",
             dependencies: [
                 "ApiClient",
+                "ShareModel",
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "DependenciesMacros", package: "swift-dependencies")
             ]
