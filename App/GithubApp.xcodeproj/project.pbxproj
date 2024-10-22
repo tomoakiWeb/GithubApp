@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		323C4E612CC3E8CB00C81014 /* HomeFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 323C4E602CC3E8CB00C81014 /* HomeFeature */; };
+		323C4E672CC7EB2B00C81014 /* GithubClient in Frameworks */ = {isa = PBXBuildFile; productRef = 323C4E662CC7EB2B00C81014 /* GithubClient */; };
 		62753F712AA8E671008CBC3D /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62753F702AA8E671008CBC3D /* App.swift */; };
 		62753F752AA8E672008CBC3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62753F742AA8E672008CBC3D /* Assets.xcassets */; };
 		62753F792AA8E672008CBC3D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62753F782AA8E672008CBC3D /* Preview Assets.xcassets */; };
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				323C4E672CC7EB2B00C81014 /* GithubClient in Frameworks */,
 				323C4E612CC3E8CB00C81014 /* HomeFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -96,6 +98,7 @@
 			name = GithubApp;
 			packageProductDependencies = (
 				323C4E602CC3E8CB00C81014 /* HomeFeature */,
+				323C4E662CC7EB2B00C81014 /* GithubClient */,
 			);
 			productName = GithubApp;
 			productReference = 62753F6D2AA8E671008CBC3D /* GithubApp.app */;
@@ -370,6 +373,10 @@
 		323C4E602CC3E8CB00C81014 /* HomeFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = HomeFeature;
+		};
+		323C4E662CC7EB2B00C81014 /* GithubClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GithubClient;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

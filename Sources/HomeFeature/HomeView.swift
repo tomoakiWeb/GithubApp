@@ -14,6 +14,9 @@ public struct HomeView: View {
             ScrollView {
                 LazyVStack {
                     Text("User Name")
+                        .onAppear {
+                            store.send(.itemAppeared(id:1))
+                        }
                 }
             }
         }

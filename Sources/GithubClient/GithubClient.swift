@@ -1,10 +1,11 @@
 import Dependencies
 import DependenciesMacros
 import ApiClient
+import ShareModel
 
 @DependencyClient
 public struct GithubClient: Sendable {
-    
+    public var searchUsersRepos: @Sendable (_ query: String, _ page: Int) async throws -> SearchUsersResponse
 }
 
 extension GithubClient: TestDependencyKey {
@@ -23,7 +24,8 @@ extension GithubClient: DependencyKey {
     public static let liveValue: GithubClient = .live()
 
     static func live(apiClient: ApiClient = .liveValue) -> Self {
-        .init()
+        .init { query, page in
+            try await apiClient.send(request: SearchUserReposRequest(query: query, page: page))
+        }
     }
 }
-
