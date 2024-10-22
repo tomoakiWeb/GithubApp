@@ -16,10 +16,12 @@ let package = Package(
         .library(
             name: "ApiClient",
             targets: ["ApiClient"]),
-        .library(name: "GithubClient",
-                 targets: ["GithubClient"]),
-        .library(name: "ShareModel",
-                 targets: ["ShareModel"])
+        .library(
+            name: "GithubClient",
+            targets: ["GithubClient"]),
+        .library(
+            name: "ShareModel",
+            targets: ["ShareModel"])
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.15.0"),
@@ -29,7 +31,9 @@ let package = Package(
         .target(
             name: "HomeFeature",
         dependencies: [
+            "ShareModel",
             "DetailFeature",
+            "GithubClient",
             .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
         ]),
         .target(
