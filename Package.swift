@@ -17,7 +17,9 @@ let package = Package(
             name: "ApiClient",
             targets: ["ApiClient"]),
         .library(name: "GithubClient",
-                 targets: ["GithubClient"])
+                 targets: ["GithubClient"]),
+        .library(name: "ShareModel",
+                 targets: ["ShareModel"])
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.15.0"),
@@ -43,6 +45,9 @@ let package = Package(
                 .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "DependenciesMacros", package: "swift-dependencies")
             ]
+        ),
+        .target(
+            name: "ShareModel"
         )
     ]
 )

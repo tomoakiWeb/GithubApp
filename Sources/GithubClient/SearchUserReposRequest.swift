@@ -1,5 +1,6 @@
 import Foundation
 import ApiClient
+import ShareModel
 
 struct SearchUserReposRequest: GithubRequest {
     typealias Response = SearchUsersResponse
@@ -14,9 +15,4 @@ struct SearchUserReposRequest: GithubRequest {
             "per_page": "20"
         ]
     }
-}
-
-
-struct SearchUsersResponse: Sendable, Decodable, Equatable  {
-    
 }
