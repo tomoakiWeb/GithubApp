@@ -29,3 +29,10 @@ public struct UserItemReducer: Reducer, Sendable {
         }
     }
 }
+
+extension IdentifiedArrayOf where Element == UserItemReducer.State, ID == Int {
+    init(response: SearchUsersResponse) {
+        self = IdentifiedArrayOf(uniqueElements: response.items.map { .make(from: $0) })
+    }
+}
+

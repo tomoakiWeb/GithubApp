@@ -12,7 +12,6 @@ public struct HomeReducer: Reducer, Sendable {
         var query = ""
         var hasMorePage = false
         var currentPage = 1
-        
         public init() {}
     }
     
@@ -21,6 +20,7 @@ public struct HomeReducer: Reducer, Sendable {
     public enum Action: BindableAction, Sendable {
         case binding(BindingAction<State>)
         case itemAppeared(id: Int)
+        case items(IdentifiedActionOf<UserItemReducer>)
         case searchUserReposResponse(Result<SearchUsersResponse, Error>)
     }
     
@@ -68,11 +68,18 @@ public struct HomeReducer: Reducer, Sendable {
                 }
         
             case let .searchUserReposResponse(.success(response)):
+                state.items = .init(response: response)
                 return .none
                 
             case .searchUserReposResponse(.failure):
                 return .none
+                
+            case .items:
+                return .none
             }
+        }
+        .forEach(\.items, action: \.items) {
+            UserItemReducer()
         }
     }
 }

@@ -6,6 +6,7 @@ struct UserItemView: View {
     
     var body: some View {
         Text(store.userRepo.name)
+            .padding(16)
     }
 }
 
