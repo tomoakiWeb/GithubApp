@@ -26,6 +26,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.15.0"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.4.0"),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "8.1.0"),
     ],
     targets: [
         .target(
@@ -34,6 +35,7 @@ let package = Package(
             "ShareModel",
             "DetailFeature",
             "GithubClient",
+            "Kingfisher",
             .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
         ]),
         .target(
