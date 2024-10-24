@@ -12,7 +12,14 @@ public struct HomeReducer: Reducer, Sendable {
         var query = ""
         var hasMorePage = false
         var currentPage = 1
+        var loadingState: LoadingState = .refreshing
         public init() {}
+    }
+    
+    enum LoadingState: Equatable {
+        case refreshing
+        case loadingNext
+        case none
     }
     
     private enum CancelId { case searchUserRepos }
@@ -43,6 +50,7 @@ public struct HomeReducer: Reducer, Sendable {
                 }
 
                 state.currentPage = 1
+                state.loadingState = .refreshing
 
                 return .run { [query = state.query, page = state.currentPage] send in
                     await send(.searchUserReposResponse(Result {
@@ -58,6 +66,7 @@ public struct HomeReducer: Reducer, Sendable {
             case .itemAppeared(id: let id):
                 if state.hasMorePage, state.items.index(id: id) == state.items.count - 1 {
                     state.currentPage += 1
+                    state.loadingState = .loadingNext
                     return .run { [query = state.query, page = state.currentPage] send in
                         await send(.searchUserReposResponse(Result {
                             try await githubClient.searchUsersRepos(query: query, page: page)
@@ -68,7 +77,18 @@ public struct HomeReducer: Reducer, Sendable {
                 }
         
             case let .searchUserReposResponse(.success(response)):
-                state.items = .init(response: response)
+                switch state.loadingState {
+                case .refreshing:
+                    state.items = .init(response: response)
+                case .loadingNext:
+                    let newItems = IdentifiedArrayOf(response: response)
+                    state.items.append(contentsOf: newItems)
+                case .none:
+                    break
+                }
+
+                state.hasMorePage = response.totalCount > state.items.count
+                state.loadingState = .none
                 return .none
                 
             case .searchUserReposResponse(.failure):

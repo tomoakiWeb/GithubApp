@@ -22,6 +22,10 @@ public struct HomeView: View {
                                 store.send(.itemAppeared(id:itemStore.id))
                             }
                     }
+                    if store.hasMorePage {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                    }
                 }
             }
         }
