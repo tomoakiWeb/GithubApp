@@ -1,12 +1,18 @@
 import ComposableArchitecture
 import Foundation
+import ShareModel
 
 @Reducer
 public struct UserItemReducer: Reducer, Sendable {
     @ObservableState
     public struct State: Equatable, Identifiable, Sendable {
-        public var id: Int { Int.random(in: 1...1000) }
-        public init() {}
+        public var id: Int { userRepo.id }
+        let userRepo: UserRepo
+        
+        static func make(from item: SearchUsersResponse.Item) -> Self {
+            .init(userRepo: .init(from: item))
+        }
+        
     }
 
     public enum Action: BindableAction, Sendable {

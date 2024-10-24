@@ -39,3 +39,13 @@ public struct SearchUsersResponse: Sendable, Decodable, Equatable {
         }
     }
 }
+
+public extension SearchUsersResponse.Item {
+    static func mock(id: Int, login: String) -> Self {
+        .init(
+            id: id,
+            login: login,
+            avatarUrl: URL(string: "https://github.com/\(login).png")!
+        )
+    }
+}
