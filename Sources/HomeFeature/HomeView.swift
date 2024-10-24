@@ -13,10 +13,15 @@ public struct HomeView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack {
-                    Text("User Name")
-                        .onAppear {
-                            store.send(.itemAppeared(id:1))
-                        }
+                    ForEach(store.scope(
+                        state: \.items,
+                        action: \.items
+                    )) { itemStore in
+                        UserItemView(store: itemStore)
+                            .onAppear {
+                                store.send(.itemAppeared(id:itemStore.id))
+                            }
+                    }
                 }
             }
         }
