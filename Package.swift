@@ -36,10 +36,15 @@ let package = Package(
             "DetailFeature",
             "GithubClient",
             "Kingfisher",
-            .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+            .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            .product(name: "Dependencies", package: "swift-dependencies"),
         ]),
         .target(
-            name: "DetailFeature"
+            name: "DetailFeature",
+            dependencies: [
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
         ),
         .target(
             name: "ApiClient"

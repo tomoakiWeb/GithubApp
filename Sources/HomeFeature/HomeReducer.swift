@@ -2,6 +2,7 @@ import ComposableArchitecture
 import Dependencies
 import GithubClient
 import ShareModel
+import DetailFeature
 
 @Reducer
 public struct HomeReducer: Reducer, Sendable {
@@ -13,6 +14,8 @@ public struct HomeReducer: Reducer, Sendable {
         var hasMorePage = false
         var currentPage = 1
         var loadingState: LoadingState = .refreshing
+        var path: StackState<DetailReducer.State> = .init()
+        
         public init() {}
     }
     
@@ -29,6 +32,7 @@ public struct HomeReducer: Reducer, Sendable {
         case itemAppeared(id: Int)
         case items(IdentifiedActionOf<UserItemReducer>)
         case searchUserReposResponse(Result<SearchUsersResponse, Error>)
+        case path(StackAction<DetailReducer.State, DetailReducer.Action>)
     }
     
     @Dependency(\.githubClient) var githubClient
@@ -96,10 +100,16 @@ public struct HomeReducer: Reducer, Sendable {
                 
             case .items:
                 return .none
+                
+            case .path:
+                return .none
             }
         }
         .forEach(\.items, action: \.items) {
             UserItemReducer()
+        }
+        .forEach(\.path, action: \.path) {
+            DetailReducer()
         }
     }
 }
