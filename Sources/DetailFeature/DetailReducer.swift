@@ -6,7 +6,10 @@ import Foundation
 public struct DetailReducer: Reducer, Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
-        public init() {}
+        public let name: String
+        public init(name: String) {
+            self.name = name
+        }
     }
 
     public init() {}
