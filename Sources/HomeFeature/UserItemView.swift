@@ -17,6 +17,7 @@ struct UserItemView: View {
                 .cornerRadius(8)
             
             Text(store.userRepo.name)
+                .foregroundStyle(.black)
                 .lineLimit(2)
             
             Spacer()
