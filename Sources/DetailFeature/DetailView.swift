@@ -9,9 +9,12 @@ public struct DetailView: View {
     }
 
     public var body: some View {
-        Text(store.userDetail?.name ?? "")
-            .padding()
-            .onAppear { store.send(.onAppear) }
+        ZStack {
+            Text(store.userDetail?.name ?? "")
+                .padding()
+                .onAppear { store.send(.onAppear) }
+        }
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
