@@ -17,7 +17,7 @@ public struct HomeView: View {
                         state: \.items,
                         action: \.items
                     )) { itemStore in
-                        NavigationLink(state: DetailReducer.State()) {
+                        NavigationLink(state: DetailReducer.State(name: itemStore.userRepo.name)) {
                             UserItemView(store: itemStore)
                                 .onAppear {
                                     store.send(.itemAppeared(id:itemStore.id))

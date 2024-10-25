@@ -9,13 +9,13 @@ public struct DetailView: View {
     }
 
     public var body: some View {
-        Text("DetailView")
+        Text(store.name)
             .padding()
     }
 }
 
 #Preview {
-    DetailView(store: .init(initialState: DetailReducer.State(), reducer: {
+    DetailView(store: .init(initialState: DetailReducer.State(name: "tomoakiWeb"), reducer: {
         DetailReducer()
     }))
 }
