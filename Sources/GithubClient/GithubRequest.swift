@@ -6,7 +6,7 @@ protocol GithubRequest: BaseRequest {
 }
 
 extension GithubRequest {
-    var url: URL { URL(string: "https://api.github.com")! }
+    var baseURL: URL { URL(string: "https://api.github.com")! }
     var headers: [String: String] { baseHeaders }
     var decoder: JSONDecoder { JSONDecoder() }
 

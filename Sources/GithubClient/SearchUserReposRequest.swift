@@ -4,9 +4,8 @@ import ShareModel
 
 struct SearchUserReposRequest: GithubRequest {
     typealias Response = SearchUsersResponse
+    var path: String = "search/users"
     let queryParameters: [String: String]?
-    let path = "/search/repositories"
-    var url: URL { URL(string: "https://api.github.com/search/users")! }
 
     public init(query: String, page: Int) {
         self.queryParameters = [

@@ -6,6 +6,7 @@ import ShareModel
 @DependencyClient
 public struct GithubClient: Sendable {
     public var searchUsersRepos: @Sendable (_ query: String, _ page: Int) async throws -> SearchUsersResponse
+    public var fetchUserDetail: @Sendable (_ name: String) async throws -> UserDetailResponse
 }
 
 extension GithubClient: TestDependencyKey {
@@ -24,8 +25,13 @@ extension GithubClient: DependencyKey {
     public static let liveValue: GithubClient = .live()
 
     static func live(apiClient: ApiClient = .liveValue) -> Self {
-        .init { query, page in
-            try await apiClient.send(request: SearchUserReposRequest(query: query, page: page))
-        }
+        .init(
+            searchUsersRepos: { query, page in
+                try await apiClient.send(request: SearchUserReposRequest(query: query, page: page))
+            },
+            fetchUserDetail: { name in
+                try await apiClient.send(request: FetchUserDetailRequest(name: name))
+            }
+        )
     }
 }

@@ -9,8 +9,9 @@ public struct DetailView: View {
     }
 
     public var body: some View {
-        Text(store.name)
+        Text(store.userDetail?.name ?? "")
             .padding()
+            .onAppear { store.send(.onAppear) }
     }
 }
 

@@ -2,7 +2,8 @@ import Foundation
 
 public protocol BaseRequest: Sendable {
     associatedtype Response: Decodable
-    var url: URL { get }
+    var baseURL: URL { get }
+    var path: String { get }
     var method: String { get }
     var headers: [String: String] { get }
     var queryParameters: [String: String]? { get }
@@ -18,6 +19,7 @@ public extension BaseRequest {
     var decoder: JSONDecoder { JSONDecoder() }
 
     func buildURLRequest() -> URLRequest {
+        let url =  baseURL.appendingPathComponent(path)
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         if let queryParameters = queryParameters {
             components.queryItems = queryParameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
