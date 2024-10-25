@@ -10,17 +10,19 @@ public struct HomeView: View {
     }
 
     public var body: some View {
-        NavigationStack {
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             ScrollView {
                 LazyVStack {
                     ForEach(store.scope(
                         state: \.items,
                         action: \.items
                     )) { itemStore in
-                        UserItemView(store: itemStore)
-                            .onAppear {
-                                store.send(.itemAppeared(id:itemStore.id))
-                            }
+                        NavigationLink(state: DetailReducer.State()) {
+                            UserItemView(store: itemStore)
+                                .onAppear {
+                                    store.send(.itemAppeared(id:itemStore.id))
+                                }
+                        }
                     }
                     if store.hasMorePage {
                         ProgressView()
@@ -28,6 +30,8 @@ public struct HomeView: View {
                     }
                 }
             }
+        } destination: {
+            DetailView(store: $0)
         }
         .searchable(text: $store.query)
     }
