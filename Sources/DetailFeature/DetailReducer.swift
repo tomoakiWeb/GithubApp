@@ -6,11 +6,13 @@ import GithubClient
 
 @Reducer
 public struct DetailReducer: Reducer, Sendable {
+    
     @ObservableState
     public struct State: Equatable, Sendable {
         public let name: String
         public var userDetail: UserDetail?
         public var isLoading: Bool = false
+        var items = IdentifiedArrayOf<UserDetailItemReducer.State>()
         
         public init(name: String, userDetailResponse: UserDetailResponse? = nil) {
             self.name = name
@@ -29,6 +31,8 @@ public struct DetailReducer: Reducer, Sendable {
         case onAppear
         case fetchUserDetail
         case userDetailResponse(Result<UserDetailResponse, Error>)
+        case fetchUserDetailRepos
+        case userDetailReposResponse(Result<[UserDetailReposResponse], Error>)
     }
 
     public var body: some ReducerOf<Self> {
@@ -41,6 +45,7 @@ public struct DetailReducer: Reducer, Sendable {
                 state.isLoading = true
                 return .run { send in
                     await send(.fetchUserDetail)
+                    await send(.fetchUserDetailRepos)
                 }
             case .fetchUserDetail:
                 return .run { [name = state.name] send in
@@ -52,6 +57,17 @@ public struct DetailReducer: Reducer, Sendable {
                 state.userDetail = .init(from: response)
                 return .none
             case .userDetailResponse(.failure(_)):
+                return .none
+            case .fetchUserDetailRepos:
+                return .run { [name = state.name] send in
+                    await send(.userDetailReposResponse(Result {
+                        try await githubClient.fetchUserDetailRepos(name: name)
+                    }))
+                }
+            case let .userDetailReposResponse(.success(response)):
+                state.items = .init(responses: response)
+                return .none
+            case .userDetailReposResponse(.failure(_)):
                 return .none
             }
         }

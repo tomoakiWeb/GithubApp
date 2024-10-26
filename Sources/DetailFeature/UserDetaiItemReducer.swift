@@ -12,7 +12,6 @@ public struct UserDetailItemReducer: Reducer, Sendable {
         static func make(from item: UserDetailReposResponse) -> Self {
             .init(userDetailItem: .init(from: item))
         }
-        
     }
 
     public enum Action: BindableAction, Sendable {
@@ -29,3 +28,10 @@ public struct UserDetailItemReducer: Reducer, Sendable {
         }
     }
 }
+
+extension IdentifiedArrayOf where Element == UserDetailItemReducer.State, ID == Int {
+    init(responses: [UserDetailReposResponse]) {
+        self = IdentifiedArrayOf(uniqueElements: responses.map { .make(from: $0) })
+    }
+}
+

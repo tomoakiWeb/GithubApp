@@ -7,6 +7,7 @@ import ShareModel
 public struct GithubClient: Sendable {
     public var searchUsersRepos: @Sendable (_ query: String, _ page: Int) async throws -> SearchUsersResponse
     public var fetchUserDetail: @Sendable (_ name: String) async throws -> UserDetailResponse
+    public var fetchUserDetailRepos: @Sendable (_ name: String) async throws -> [UserDetailReposResponse]
 }
 
 extension GithubClient: TestDependencyKey {
@@ -31,6 +32,9 @@ extension GithubClient: DependencyKey {
             },
             fetchUserDetail: { name in
                 try await apiClient.send(request: FetchUserDetailRequest(name: name))
+            },
+            fetchUserDetailRepos: { name in
+                try await apiClient.send(request: FetchUserDetailReposRequest(name: name))
             }
         )
     }
