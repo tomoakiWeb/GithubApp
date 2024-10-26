@@ -14,6 +14,9 @@ let package = Package(
             name: "DetailFeature",
             targets: ["DetailFeature"]),
         .library(
+            name: "WebRepoFeature",
+            targets: ["WebRepoFeature"]),
+        .library(
             name: "ApiClient",
             targets: ["ApiClient"]),
         .library(
@@ -49,6 +52,7 @@ let package = Package(
                 "GithubClient",
                 "Kingfisher",
                 "Utility",
+                "WebRepoFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
@@ -70,6 +74,12 @@ let package = Package(
         ),
         .target(
             name: "Utility"
+        ),
+        .target(
+            name: "WebRepoFeature",
+            dependencies: [
+                "Utility",
+            ]
         )
     ]
 )
