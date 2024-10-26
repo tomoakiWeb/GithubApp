@@ -7,7 +7,11 @@ struct FetchUserDetailReposRequest: GithubRequest {
     var path: String
     var queryParameters: [String : String]?
 
-    public init(name: String) {
+    public init(name: String, page: Int) {
         self.path = "users/\(name)/repos"
+        self.queryParameters = [
+            "page": page.description,
+            "per_page": "20"
+        ]
     }
 }

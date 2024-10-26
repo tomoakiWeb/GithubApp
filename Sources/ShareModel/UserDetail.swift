@@ -7,6 +7,7 @@ public struct UserDetail: Equatable, Sendable {
     public let fullName: String?
     public let followers: Int
     public let following: Int
+    public let publicRepos: Int
 }
 
 public extension UserDetail {
@@ -17,6 +18,7 @@ public extension UserDetail {
         self.fullName = response.name
         self.followers = response.followers
         self.following = response.following
+        self.publicRepos = response.publicRepos
     }
 }
 

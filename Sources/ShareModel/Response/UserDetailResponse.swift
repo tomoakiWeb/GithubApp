@@ -7,6 +7,7 @@ public struct UserDetailResponse: Sendable, Decodable, Equatable {
     public let name: String?
     public let followers: Int
     public let following: Int
+    public let publicRepos: Int
 
     public init(
         id: Int,
@@ -14,7 +15,8 @@ public struct UserDetailResponse: Sendable, Decodable, Equatable {
         avatarUrl: URL,
         name: String?,
         followers: Int,
-        following: Int
+        following: Int,
+        publicRepos: Int
     ) {
         self.id = id
         self.login = login
@@ -22,6 +24,7 @@ public struct UserDetailResponse: Sendable, Decodable, Equatable {
         self.name = name
         self.followers = followers
         self.following = following
+        self.publicRepos = publicRepos
     }
 
     enum CodingKeys: String, CodingKey {
@@ -31,19 +34,21 @@ public struct UserDetailResponse: Sendable, Decodable, Equatable {
         case name
         case followers
         case following
+        case publicRepos = "public_repos"
     }
 }
 
 
 public extension UserDetailResponse {
-    static func mock(id: Int, login: String, name: String?, followers: Int, following: Int) -> Self {
+    static func mock(id: Int, login: String, name: String?, followers: Int, following: Int, publicRepos: Int) -> Self {
         .init(
             id: id,
             login: login,
             avatarUrl: URL(string: "https://github.com/\(login).png")!,
             name: name,
             followers: followers,
-            following: following
+            following: following,
+            publicRepos: publicRepos
         )
     }
 }

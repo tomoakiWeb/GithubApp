@@ -25,6 +25,14 @@ public struct DetailView: View {
                         action: \.items
                     )) { itemStore in
                         UserDetailItemView(store: itemStore)
+                            .onAppear {
+                                store.send(.itemAppeared(id:itemStore.id))
+                            }
+                    }
+                    
+                    if store.hasMorePage {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
                     }
                 }
             }
@@ -40,7 +48,8 @@ public struct DetailView: View {
                                                                                         login: "tomo",
                                                                                         name: "full name",
                                                                                         followers: 12,
-                                                                                        following: 6)),
+                                                                                        following: 6,
+                                                                                        publicRepos: 12)),
                             reducer: {
         DetailReducer()
     }))

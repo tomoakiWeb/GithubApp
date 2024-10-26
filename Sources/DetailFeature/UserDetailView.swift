@@ -54,6 +54,7 @@ struct UserDetailView: View {
                                                  login: "tomo",
                                                  name: "full name",
                                                  followers: 1200,
-                                                 following: 6230000)))
+                                                 following: 6230000,
+                                                 publicRepos: 12)))
 }
 
