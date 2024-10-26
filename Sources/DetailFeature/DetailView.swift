@@ -21,7 +21,7 @@ public struct DetailView: View {
                     }
                     
                     ForEach(store.scope(
-                        state: \.items,
+                        state: \.filteredItems,
                         action: \.items
                     )) { itemStore in
                         UserDetailItemView(store: itemStore)

@@ -13,6 +13,11 @@ public struct DetailReducer: Reducer, Sendable {
         public var userDetail: UserDetail?
         var currentPage = 1
         var items = IdentifiedArrayOf<UserDetailItemReducer.State>()
+        var filteredItems: IdentifiedArrayOf<UserDetailItemReducer.State> {
+            items.filter {
+                !$0.userDetailItem.fork
+            }
+        }
         var loadingState: LoadingState = .refreshing
         var hasMorePage = false
         
