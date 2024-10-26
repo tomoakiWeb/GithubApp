@@ -54,3 +54,29 @@ struct UserDetailItemView: View {
         UserDetailItemReducer()
     }))
 }
+
+#Preview("no language and description") {
+    UserDetailItemView(store: .init(initialState: UserDetailItemReducer.State(userDetailItem: .init(from: .mock(id: 1,
+                                                                                                                name: "repo name",
+                                                                                                                fork: false,
+                                                                                                                description: nil,
+                                                                                                                stargazersCount: 3,
+                                                                                                                language: nil,
+                                                                                                                htmlUrl: "https://github.com/tomoakiWeb/GithubApp"))),
+                                    reducer: {
+        UserDetailItemReducer()
+    }))
+}
+
+#Preview("long name and description") {
+    UserDetailItemView(store: .init(initialState: UserDetailItemReducer.State(userDetailItem: .init(from: .mock(id: 1,
+                                                                                                                name: "long repo name long repo namelong repo name long repo namelong repo name long repo namelong repo name",
+                                                                                                                fork: false,
+                                                                                                                description: "long description long description long description long description long description long description long description long description long description long description",
+                                                                                                                stargazersCount: 3,
+                                                                                                                language: "Swift",
+                                                                                                                htmlUrl: "https://github.com/tomoakiWeb/GithubApp"))),
+                                    reducer: {
+        UserDetailItemReducer()
+    }))
+}
