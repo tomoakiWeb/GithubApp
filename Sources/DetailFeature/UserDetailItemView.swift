@@ -1,6 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 import Kingfisher
+import Utility
 
 struct UserDetailItemView: View {
     @Bindable var store: StoreOf<UserDetailItemReducer>
@@ -17,7 +18,7 @@ struct UserDetailItemView: View {
                 HStack(spacing: 4) {
                     Image(systemName: "star.fill")
                         .foregroundStyle(.yellow)
-                    Text("\(store.userDetailItem.stargazersCount)")
+                    Text(store.userDetailItem.stargazersCount.formattedWithSuffix)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -47,7 +48,7 @@ struct UserDetailItemView: View {
                                                                                                                 name: "repo name",
                                                                                                                 fork: false,
                                                                                                                 description: "description",
-                                                                                                                stargazersCount: 3,
+                                                                                                                stargazersCount: 3300,
                                                                                                                 language: "Swift",
                                                                                                                 htmlUrl: "https://github.com/tomoakiWeb/GithubApp"))),
                                     reducer: {
@@ -60,7 +61,7 @@ struct UserDetailItemView: View {
                                                                                                                 name: "repo name",
                                                                                                                 fork: false,
                                                                                                                 description: nil,
-                                                                                                                stargazersCount: 3,
+                                                                                                                stargazersCount: 3100000,
                                                                                                                 language: nil,
                                                                                                                 htmlUrl: "https://github.com/tomoakiWeb/GithubApp"))),
                                     reducer: {
