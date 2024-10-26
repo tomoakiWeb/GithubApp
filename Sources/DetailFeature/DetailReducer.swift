@@ -29,10 +29,7 @@ public struct DetailReducer: Reducer, Sendable {
     public enum Action: BindableAction, Sendable {
         case binding(BindingAction<State>)
         case onAppear
-        case fetchUserDetail
-        case userDetailResponse(Result<UserDetailResponse, Error>)
-        case fetchUserDetailRepos
-        case userDetailReposResponse(Result<[UserDetailReposResponse], Error>)
+        case userDetailAndReposFetched(Result<(UserDetailResponse, [UserDetailReposResponse]), Error>)
     }
 
     public var body: some ReducerOf<Self> {
@@ -43,31 +40,25 @@ public struct DetailReducer: Reducer, Sendable {
                 return .none
             case .onAppear:
                 state.isLoading = true
-                return .run { send in
-                    await send(.fetchUserDetail)
-                    await send(.fetchUserDetailRepos)
-                }
-            case .fetchUserDetail:
                 return .run { [name = state.name] send in
-                    await send(.userDetailResponse(Result {
-                        try await githubClient.fetchUserDetail(name: name)
-                    }))
+                    async let userDetailResult = githubClient.fetchUserDetail(name: name)
+                    async let userReposResult = githubClient.fetchUserDetailRepos(name: name)
+                    
+                    do {
+                        let userDetail = try await userDetailResult
+                        let userRepos = try await userReposResult
+                        await send(.userDetailAndReposFetched(.success((userDetail, userRepos))))
+                    } catch {
+                        await send(.userDetailAndReposFetched(.failure(error)))
+                    }
                 }
-            case let .userDetailResponse(.success(response)):
-                state.userDetail = .init(from: response)
+            case let .userDetailAndReposFetched(.success((userDetail, userRepos))):
+                state.userDetail = .init(from: userDetail)
+                state.items = .init(responses: userRepos)
+                state.isLoading = false
                 return .none
-            case .userDetailResponse(.failure(_)):
-                return .none
-            case .fetchUserDetailRepos:
-                return .run { [name = state.name] send in
-                    await send(.userDetailReposResponse(Result {
-                        try await githubClient.fetchUserDetailRepos(name: name)
-                    }))
-                }
-            case let .userDetailReposResponse(.success(response)):
-                state.items = .init(responses: response)
-                return .none
-            case .userDetailReposResponse(.failure(_)):
+            case .userDetailAndReposFetched(.failure):
+                state.isLoading = false
                 return .none
             }
         }
