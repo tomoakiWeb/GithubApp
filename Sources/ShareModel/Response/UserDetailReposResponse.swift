@@ -7,6 +7,7 @@ public struct UserDetailReposResponse: Sendable, Decodable, Equatable {
     public let description: String?
     public let stargazersCount: Int
     public let language: String?
+    public let htmlUrl: String
 
     public init(
         id: Int,
@@ -14,7 +15,8 @@ public struct UserDetailReposResponse: Sendable, Decodable, Equatable {
         fork: Bool,
         description: String?,
         stargazersCount: Int,
-        language: String?
+        language: String?,
+        htmlUrl: String
     ) {
         self.id = id
         self.name = name
@@ -22,6 +24,7 @@ public struct UserDetailReposResponse: Sendable, Decodable, Equatable {
         self.description = description
         self.stargazersCount = stargazersCount
         self.language = language
+        self.htmlUrl = htmlUrl
     }
 
     enum CodingKeys: String, CodingKey {
@@ -31,6 +34,7 @@ public struct UserDetailReposResponse: Sendable, Decodable, Equatable {
         case description
         case stargazersCount = "stargazers_count"
         case language
+        case htmlUrl = "html_url"
     }
 }
 
@@ -41,7 +45,8 @@ public extension UserDetailReposResponse {
         fork: Bool,
         description: String?,
         stargazersCount: Int,
-        language: String?
+        language: String?,
+        htmlUrl: String
     ) -> Self {
         .init(
             id: id,
@@ -49,7 +54,8 @@ public extension UserDetailReposResponse {
             fork: fork,
             description: description,
             stargazersCount: stargazersCount,
-            language: language
+            language: language,
+            htmlUrl: htmlUrl
         )
     }
 }
