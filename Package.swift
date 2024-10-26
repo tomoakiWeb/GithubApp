@@ -79,6 +79,8 @@ let package = Package(
             name: "WebRepoFeature",
             dependencies: [
                 "Utility",
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "Dependencies", package: "swift-dependencies"),
             ]
         )
     ]

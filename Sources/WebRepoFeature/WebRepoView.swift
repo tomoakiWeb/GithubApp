@@ -1,14 +1,17 @@
 import SwiftUI
 import Utility
+import ComposableArchitecture
 
 public struct WebRepoView: View {
-    let repoUrl: String
+    @Bindable var store: StoreOf<WebRepoReducer>
     
     public var body: some View {
-        UIWebView(urlString: repoUrl)
+        UIWebView(urlString: store.repoUrl)
     }
 }
 
 #Preview {
-    WebRepoView(repoUrl: "https://www.apple.com/jp")
+    WebRepoView(store: .init(initialState: WebRepoReducer.State(repoUrl: "https://www.apple.com/jp/"), reducer: {
+        WebRepoReducer()
+    }))
 }

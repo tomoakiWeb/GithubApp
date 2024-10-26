@@ -1,6 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 import Kingfisher
+import WebRepoFeature
 
 public struct DetailView: View {
     @Bindable var store: StoreOf<DetailReducer>
