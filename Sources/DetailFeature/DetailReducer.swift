@@ -12,8 +12,11 @@ public struct DetailReducer: Reducer, Sendable {
         public var userDetail: UserDetail?
         public var isLoading: Bool = false
         
-        public init(name: String) {
+        public init(name: String, userDetailResponse: UserDetailResponse? = nil) {
             self.name = name
+            if let userDetailResponse = userDetailResponse {
+                self.userDetail = .init(from: userDetailResponse)
+            }
         }
     }
     
