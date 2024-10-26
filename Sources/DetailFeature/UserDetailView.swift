@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 import Kingfisher
 import ShareModel
+import Utility
 
 struct UserDetailView: View {
     let userDetail: UserDetail
@@ -31,11 +32,11 @@ struct UserDetailView: View {
                     }
                     
                     HStack(spacing: 4) {
-                        Text(String(userDetail.followers))
+                        Text(userDetail.followers.formattedWithSuffix)
                         Text("フォロワー")
                             .foregroundStyle(.gray)
                         
-                        Text(String(userDetail.following))
+                        Text(String(userDetail.following.formattedWithSuffix))
                         Text("フォロー中")
                             .foregroundStyle(.gray)
                         Spacer()
@@ -52,7 +53,7 @@ struct UserDetailView: View {
     UserDetailView(userDetail: .init(from: .mock(id: 1,
                                                  login: "tomo",
                                                  name: "full name",
-                                                 followers: 12,
-                                                 following: 6)))
+                                                 followers: 1200,
+                                                 following: 6230000)))
 }
 
