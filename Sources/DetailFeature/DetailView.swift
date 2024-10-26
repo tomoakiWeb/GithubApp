@@ -11,11 +11,22 @@ public struct DetailView: View {
 
     public var body: some View {
         ZStack {
-            if let userDetail = store.userDetail {
-                VStack {
-                    UserDetailView(userDetail: userDetail)
+            ScrollView {
+                LazyVStack {
+                    if let userDetail = store.userDetail {
+                        VStack {
+                            UserDetailView(userDetail: userDetail)
+                        }
+                        .padding(16)
+                    }
+                    
+                    ForEach(store.scope(
+                        state: \.items,
+                        action: \.items
+                    )) { itemStore in
+                        UserDetailItemView(store: itemStore)
+                    }
                 }
-                .padding(16)
             }
         }
         .onAppear { store.send(.onAppear) }

@@ -30,6 +30,7 @@ public struct DetailReducer: Reducer, Sendable {
         case binding(BindingAction<State>)
         case onAppear
         case userDetailAndReposFetched(Result<(UserDetailResponse, [UserDetailReposResponse]), Error>)
+        case items(IdentifiedActionOf<UserDetailItemReducer>)
     }
 
     public var body: some ReducerOf<Self> {
@@ -60,7 +61,12 @@ public struct DetailReducer: Reducer, Sendable {
             case .userDetailAndReposFetched(.failure):
                 state.isLoading = false
                 return .none
+            case .items:
+                return .none
             }
+        }
+        .forEach(\.items, action: \.items) {
+            UserDetailItemReducer()
         }
     }
 }
