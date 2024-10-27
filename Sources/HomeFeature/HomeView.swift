@@ -44,6 +44,15 @@ public struct HomeView: View {
             }
         }
         .searchable(text: $store.query)
+        .alert(
+            "エラーが発生しました",
+            isPresented: $store.showErrorDialog,
+            presenting: store.errorMessage
+        ) { _ in
+            Button("閉じる", role: .cancel) {}
+        } message: { message in
+            Text(message)
+        }
     }
 }
 

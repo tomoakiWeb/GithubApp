@@ -4,6 +4,7 @@ import GithubClient
 import ShareModel
 import DetailFeature
 import WebRepoFeature
+import ApiClient
 
 @Reducer
 public struct HomeReducer: Reducer, Sendable {
@@ -22,6 +23,8 @@ public struct HomeReducer: Reducer, Sendable {
         var currentPage = 1
         var loadingState: LoadingState = .refreshing
         var path = StackState<Path.State>()
+        var showErrorDialog = false
+        var errorMessage: String = ""
         
         public init() {}
     }
@@ -69,7 +72,7 @@ public struct HomeReducer: Reducer, Sendable {
                         try await githubClient.searchUsersRepos(query: query, page: page)
                     }))
                 }
-                .debounce(id: CancelId.searchUserRepos, for: 0.3, scheduler: mainQueue)
+                .debounce(id: CancelId.searchUserRepos, for: 1.0, scheduler: mainQueue)
                 
             case .binding:
                 return .none
@@ -102,7 +105,13 @@ public struct HomeReducer: Reducer, Sendable {
                 state.loadingState = .none
                 return .none
                 
-            case .searchUserReposResponse(.failure):
+            case let .searchUserReposResponse(.failure(error)):
+                if let apiError = error as? ApiError {
+                    state.errorMessage = apiError.message
+                } else {
+                    state.errorMessage = error.localizedDescription
+                }
+                state.showErrorDialog = true
                 return .none
                 
             case .items:

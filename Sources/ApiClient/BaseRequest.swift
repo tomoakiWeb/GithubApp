@@ -33,13 +33,12 @@ public extension BaseRequest {
 
     func handleResponse(data: Data, urlResponse: HTTPURLResponse) throws -> Response {
         guard 200..<300 ~= urlResponse.statusCode else {
-            let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
-            throw ApiError.unacceptableStatusCode(urlResponse.statusCode, message: errorMessage)
+            throw ApiError.unacceptableStatusCode(urlResponse.statusCode)
         }
         
         if let contentType = urlResponse.allHeaderFields["Content-Type"] as? String,
            !contentType.contains("application/json") {
-            throw ApiError.invalidContentType(contentType)
+            throw ApiError.invalidContentType
         }
 
         guard !data.isEmpty else {
@@ -49,7 +48,7 @@ public extension BaseRequest {
         do {
             return try decoder.decode(Response.self, from: data)
         } catch {
-            throw ApiError.decodingFailed(error)
+            throw ApiError.decodingFailed
         }
     }
 }
