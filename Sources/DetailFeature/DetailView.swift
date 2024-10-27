@@ -44,6 +44,10 @@ public struct DetailView: View {
                     }
                 }
             }
+            if store.loadingState == .refreshing {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+            }
         }
         .onAppear { store.send(.onAppear) }
         .navigationBarTitleDisplayMode(.inline)
