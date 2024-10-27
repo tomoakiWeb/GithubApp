@@ -11,3 +11,5 @@ DerivedData/
 *.dll
 
 .env
+
+*.xcodeproj/xcuserdata/
