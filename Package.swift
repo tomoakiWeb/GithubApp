@@ -40,6 +40,7 @@ let package = Package(
         dependencies: [
             "ShareModel",
             "DetailFeature",
+            "WebRepoFeature",
             "GithubClient",
             "Kingfisher",
             .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),

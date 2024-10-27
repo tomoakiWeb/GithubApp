@@ -25,10 +25,17 @@ public struct DetailView: View {
                         state: \.filteredItems,
                         action: \.items
                     )) { itemStore in
-                        UserDetailItemView(store: itemStore)
-                            .onAppear {
-                                store.send(.itemAppeared(id:itemStore.id))
-                            }
+                        
+                        Button {
+                            store.send(.userDetailItemTapped(itemStore.userDetailItem.htmlUrl))
+                        } label: {
+                            UserDetailItemView(store: itemStore)
+                                .contentShape(Rectangle())
+                                .onAppear {
+                                    store.send(.itemAppeared(id:itemStore.id))
+                                }
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     
                     if store.hasMorePage {

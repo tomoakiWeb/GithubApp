@@ -5,6 +5,10 @@ import ComposableArchitecture
 public struct WebRepoView: View {
     @Bindable var store: StoreOf<WebRepoReducer>
     
+    public init(store: StoreOf<WebRepoReducer>) {
+        self.store = store
+    }
+    
     public var body: some View {
         UIWebView(urlString: store.repoUrl)
     }

@@ -1,12 +1,12 @@
 import ComposableArchitecture
 import Dependencies
 import Foundation
-import ShareModel
 import GithubClient
+import ShareModel
 
 @Reducer
 public struct DetailReducer: Reducer, Sendable {
-    
+
     @ObservableState
     public struct State: Equatable, Sendable {
         public let name: String
@@ -20,7 +20,7 @@ public struct DetailReducer: Reducer, Sendable {
         }
         var loadingState: LoadingState = .refreshing
         var hasMorePage = false
-        
+
         public init(name: String, userDetailResponse: UserDetailResponse? = nil) {
             self.name = name
             if let userDetailResponse = userDetailResponse {
@@ -28,13 +28,13 @@ public struct DetailReducer: Reducer, Sendable {
             }
         }
     }
-    
+
     enum LoadingState: Equatable {
         case refreshing
         case loadingNext
         case none
     }
-    
+
     @Dependency(\.githubClient) var githubClient
 
     public init() {}
@@ -46,6 +46,8 @@ public struct DetailReducer: Reducer, Sendable {
         case items(IdentifiedActionOf<UserDetailItemReducer>)
         case itemAppeared(id: Int)
         case userDetailReposResponseResponse(Result<[UserDetailReposResponse], Error>)
+        case userDetailItemTapped(String)
+        case pushWebRepo(String)
     }
 
     public var body: some ReducerOf<Self> {
@@ -54,12 +56,13 @@ public struct DetailReducer: Reducer, Sendable {
             switch action {
             case .binding:
                 return .none
+
             case .onAppear:
                 state.currentPage = 1
                 return .run { [name = state.name, page = state.currentPage] send in
                     async let userDetailResult = githubClient.fetchUserDetail(name: name)
                     async let userReposResult = githubClient.fetchUserDetailRepos(name: name, page: page)
-                    
+
                     do {
                         let userDetail = try await userDetailResult
                         let userRepos = try await userReposResult
@@ -68,15 +71,13 @@ public struct DetailReducer: Reducer, Sendable {
                         await send(.userDetailAndReposFetched(.failure(error)))
                     }
                 }
-                
+
             case .itemAppeared(id: let id):
                 if let publicRepos = state.userDetail?.publicRepos, publicRepos > state.items.count,
                    state.items.index(id: id) == state.items.count - 1 {
-                    
                     state.hasMorePage = true
                     state.currentPage += 1
                     state.loadingState = .loadingNext
-                    
                     return .run { [name = state.name, page = state.currentPage] send in
                         await send(.userDetailReposResponseResponse(Result {
                             try await githubClient.fetchUserDetailRepos(name: name, page: page)
@@ -95,14 +96,21 @@ public struct DetailReducer: Reducer, Sendable {
             case .userDetailAndReposFetched(.failure):
                 state.loadingState = .none
                 return .none
+
             case .items:
                 return .none
-                
+
+            case let .userDetailItemTapped(url):
+                return .send(.pushWebRepo(url))
+
             case let .userDetailReposResponseResponse(.success(response)):
                 state.items.append(contentsOf: response.map { UserDetailItemReducer.State.make(from: $0) })
                 return .none
 
             case .userDetailReposResponseResponse(.failure(_)):
+                return .none
+                
+            case .pushWebRepo:
                 return .none
             }
         }
@@ -111,3 +119,4 @@ public struct DetailReducer: Reducer, Sendable {
         }
     }
 }
+

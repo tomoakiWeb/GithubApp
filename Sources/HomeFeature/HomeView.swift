@@ -1,6 +1,7 @@
 import SwiftUI
 import DetailFeature
 import ComposableArchitecture
+import WebRepoFeature
 
 public struct HomeView: View {
     @Bindable var store: StoreOf<HomeReducer>
@@ -17,12 +18,16 @@ public struct HomeView: View {
                         state: \.items,
                         action: \.items
                     )) { itemStore in
-                        NavigationLink(state: DetailReducer.State(name: itemStore.userRepo.name)) {
+                        Button {
+                            store.send(.userItemTapped(itemStore.userRepo.name))
+                        } label: {
                             UserItemView(store: itemStore)
+                                .contentShape(Rectangle())
                                 .onAppear {
                                     store.send(.itemAppeared(id:itemStore.id))
                                 }
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     if store.hasMorePage {
                         ProgressView()
@@ -30,8 +35,13 @@ public struct HomeView: View {
                     }
                 }
             }
-        } destination: {
-            DetailView(store: $0)
+        } destination: { store in
+            switch store.case {
+            case let .detail(store):
+                DetailView(store: store)
+            case let .webRepo(store):
+                WebRepoView(store:store)
+            }
         }
         .searchable(text: $store.query)
     }

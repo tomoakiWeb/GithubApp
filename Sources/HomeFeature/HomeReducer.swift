@@ -3,18 +3,25 @@ import Dependencies
 import GithubClient
 import ShareModel
 import DetailFeature
+import WebRepoFeature
 
 @Reducer
 public struct HomeReducer: Reducer, Sendable {
     
+    @Reducer
+    public enum Path {
+        case detail(DetailReducer)
+        case webRepo(WebRepoReducer)
+    }
+    
     @ObservableState
-    public struct State: Equatable, Sendable {
+    public struct State: Equatable {
         var items = IdentifiedArrayOf<UserItemReducer.State>()
         var query = ""
         var hasMorePage = false
         var currentPage = 1
         var loadingState: LoadingState = .refreshing
-        var path: StackState<DetailReducer.State> = .init()
+        var path = StackState<Path.State>()
         
         public init() {}
     }
@@ -27,12 +34,14 @@ public struct HomeReducer: Reducer, Sendable {
     
     private enum CancelId { case searchUserRepos }
     
-    public enum Action: BindableAction, Sendable {
+    public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case itemAppeared(id: Int)
         case items(IdentifiedActionOf<UserItemReducer>)
         case searchUserReposResponse(Result<SearchUsersResponse, Error>)
-        case path(StackAction<DetailReducer.State, DetailReducer.Action>)
+        case path(StackActionOf<Path>)
+        case userItemTapped(String)
+        case webRepoRequested(String)
     }
     
     @Dependency(\.githubClient) var githubClient
@@ -101,15 +110,25 @@ public struct HomeReducer: Reducer, Sendable {
             case .items:
                 return .none
                 
+            case let .userItemTapped(name):
+                state.path.append(.detail(DetailReducer.State(name: name)))
+                return .none
+                
+            case let .path(.element(_, .detail(.pushWebRepo(url)))):
+                state.path.append(.webRepo(WebRepoReducer.State(repoUrl: url)))
+                return .none
             case .path:
+                return .none
+                
+            case .webRepoRequested(_):
                 return .none
             }
         }
         .forEach(\.items, action: \.items) {
             UserItemReducer()
         }
-        .forEach(\.path, action: \.path) {
-            DetailReducer()
-        }
+        .forEach(\.path, action: \.path)
     }
 }
+
+extension HomeReducer.Path.State: Equatable {}

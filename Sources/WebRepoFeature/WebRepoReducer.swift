@@ -6,8 +6,14 @@ import ShareModel
 public struct WebRepoReducer: Reducer, Sendable {
     @ObservableState
     public struct State: Equatable, Sendable {
-        let repoUrl: String
+        public let repoUrl: String
+        
+        public init(repoUrl: String) {
+            self.repoUrl = repoUrl
+        }
     }
+    
+    public init() {}
 
     public enum Action: BindableAction, Sendable {
         case binding(BindingAction<State>)
