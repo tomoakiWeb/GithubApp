@@ -55,7 +55,6 @@ public struct HomeReducer: Reducer, Sendable {
             switch action {
                 
             case .binding(\.query):
-                print("test:binding:\(state.query)")
                 guard !state.query.isEmpty else {
                     state.hasMorePage = false
                     state.items.removeAll()
@@ -73,7 +72,6 @@ public struct HomeReducer: Reducer, Sendable {
                 .debounce(id: CancelId.searchUserRepos, for: 0.3, scheduler: mainQueue)
                 
             case .binding:
-                print("test:binding:none")
                 return .none
                 
             case .itemAppeared(id: let id):
@@ -117,6 +115,7 @@ public struct HomeReducer: Reducer, Sendable {
             case let .path(.element(_, .detail(.pushWebRepo(url)))):
                 state.path.append(.webRepo(WebRepoReducer.State(repoUrl: url)))
                 return .none
+
             case .path:
                 return .none
                 
