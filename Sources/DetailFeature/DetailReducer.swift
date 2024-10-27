@@ -3,6 +3,7 @@ import Dependencies
 import Foundation
 import GithubClient
 import ShareModel
+import ApiClient
 
 @Reducer
 public struct DetailReducer: Reducer, Sendable {
@@ -18,8 +19,10 @@ public struct DetailReducer: Reducer, Sendable {
                 !$0.userDetailItem.fork
             }
         }
-        var loadingState: LoadingState = .refreshing
+        var isLoading = false
         var hasMorePage = false
+        var showErrorDialog = false
+        var errorMessage: String = ""
 
         public init(name: String, userDetailResponse: UserDetailResponse? = nil) {
             self.name = name
@@ -27,12 +30,6 @@ public struct DetailReducer: Reducer, Sendable {
                 self.userDetail = .init(from: userDetailResponse)
             }
         }
-    }
-
-    enum LoadingState: Equatable {
-        case refreshing
-        case loadingNext
-        case none
     }
 
     @Dependency(\.githubClient) var githubClient
@@ -45,7 +42,7 @@ public struct DetailReducer: Reducer, Sendable {
         case userDetailAndReposFetched(Result<(UserDetailResponse, [UserDetailReposResponse]), Error>)
         case items(IdentifiedActionOf<UserDetailItemReducer>)
         case itemAppeared(id: Int)
-        case userDetailReposResponseResponse(Result<[UserDetailReposResponse], Error>)
+        case userDetailReposResponse(Result<[UserDetailReposResponse], Error>)
         case userDetailItemTapped(String)
         case pushWebRepo(String)
     }
@@ -59,6 +56,7 @@ public struct DetailReducer: Reducer, Sendable {
 
             case .onAppear:
                 state.currentPage = 1
+                state.isLoading = true
                 return .run { [name = state.name, page = state.currentPage] send in
                     async let userDetailResult = githubClient.fetchUserDetail(name: name)
                     async let userReposResult = githubClient.fetchUserDetailRepos(name: name, page: page)
@@ -77,9 +75,8 @@ public struct DetailReducer: Reducer, Sendable {
                    state.items.index(id: id) == state.items.count - 1 {
                     state.hasMorePage = true
                     state.currentPage += 1
-                    state.loadingState = .loadingNext
                     return .run { [name = state.name, page = state.currentPage] send in
-                        await send(.userDetailReposResponseResponse(Result {
+                        await send(.userDetailReposResponse(Result {
                             try await githubClient.fetchUserDetailRepos(name: name, page: page)
                         }))
                     }
@@ -91,10 +88,17 @@ public struct DetailReducer: Reducer, Sendable {
             case let .userDetailAndReposFetched(.success((userDetail, userRepos))):
                 state.userDetail = .init(from: userDetail)
                 state.items = .init(responses: userRepos)
-                state.loadingState = .none
+                state.isLoading = false
                 return .none
-            case .userDetailAndReposFetched(.failure):
-                state.loadingState = .none
+                
+            case let .userDetailAndReposFetched(.failure(error)):
+                if let apiError = error as? ApiError {
+                    state.errorMessage = apiError.message
+                } else {
+                    state.errorMessage = error.localizedDescription
+                }
+                state.showErrorDialog = true
+                state.isLoading = false
                 return .none
 
             case .items:
@@ -103,11 +107,17 @@ public struct DetailReducer: Reducer, Sendable {
             case let .userDetailItemTapped(url):
                 return .send(.pushWebRepo(url))
 
-            case let .userDetailReposResponseResponse(.success(response)):
+            case let .userDetailReposResponse(.success(response)):
                 state.items.append(contentsOf: response.map { UserDetailItemReducer.State.make(from: $0) })
                 return .none
 
-            case .userDetailReposResponseResponse(.failure(_)):
+            case let .userDetailReposResponse(.failure(error)):
+                if let apiError = error as? ApiError {
+                    state.errorMessage = apiError.message
+                } else {
+                    state.errorMessage = error.localizedDescription
+                }
+                state.showErrorDialog = true
                 return .none
                 
             case .pushWebRepo:

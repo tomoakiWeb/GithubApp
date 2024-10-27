@@ -44,13 +44,22 @@ public struct DetailView: View {
                     }
                 }
             }
-            if store.loadingState == .refreshing {
+            if store.isLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity)
             }
         }
         .onAppear { store.send(.onAppear) }
         .navigationBarTitleDisplayMode(.inline)
+        .alert(
+            "エラーが発生しました",
+            isPresented: $store.showErrorDialog,
+            presenting: store.errorMessage
+        ) { _ in
+            Button("閉じる", role: .cancel) {}
+        } message: { message in
+            Text(message)
+        }
     }
 }
 

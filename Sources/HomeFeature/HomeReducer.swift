@@ -72,7 +72,7 @@ public struct HomeReducer: Reducer, Sendable {
                         try await githubClient.searchUsersRepos(query: query, page: page)
                     }))
                 }
-                .debounce(id: CancelId.searchUserRepos, for: 1.0, scheduler: mainQueue)
+                .debounce(id: CancelId.searchUserRepos, for: 0.5, scheduler: mainQueue)
                 
             case .binding:
                 return .none
