@@ -60,7 +60,6 @@ public struct DetailReducer: Reducer, Sendable {
                 return .run { [name = state.name, page = state.currentPage] send in
                     async let userDetailResult = githubClient.fetchUserDetail(name: name)
                     async let userReposResult = githubClient.fetchUserDetailRepos(name: name, page: page)
-
                     do {
                         let userDetail = try await userDetailResult
                         let userRepos = try await userReposResult
