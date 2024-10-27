@@ -55,6 +55,10 @@ class DetailFeatureTests: XCTestCase {
         await store.receive(\.userDetailReposResponse.success) {
             $0.items = .init(responses: UserDetailReposResponse.mockAll())
         }
+        
+        await store.send(.itemAppeared(id: 20)) {
+            $0.hasMorePage = false
+        }
     }
 }
 
