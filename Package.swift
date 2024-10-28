@@ -99,6 +99,12 @@ let package = Package(
                 "ShareModel",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
+        ),
+        .testTarget(
+            name: "UtilityTests",
+            dependencies: [
+                "Utility",
+            ]
         )
     ]
 )
