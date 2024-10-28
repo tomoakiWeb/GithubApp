@@ -60,6 +60,10 @@ public struct HomeView: View {
     HomeView(
         store: .init(initialState: HomeReducer.State()) {
             HomeReducer()
+                .dependency(
+                    \.githubClient,
+                    .mock
+                )
         }
     )
 }

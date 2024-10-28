@@ -19,11 +19,8 @@ public struct DetailReducer: Reducer, Sendable {
         var showErrorDialog = false
         var errorMessage: String = ""
 
-        public init(name: String, userDetailResponse: UserDetailResponse? = nil) {
+        public init(name: String) {
             self.name = name
-            if let userDetailResponse = userDetailResponse {
-                self.userDetail = .init(from: userDetailResponse)
-            }
         }
     }
 

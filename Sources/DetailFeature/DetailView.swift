@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 import Kingfisher
 import WebRepoFeature
+import GithubClient
 
 public struct DetailView: View {
     @Bindable var store: StoreOf<DetailReducer>
@@ -64,14 +65,15 @@ public struct DetailView: View {
 }
 
 #Preview {
-    DetailView(store: .init(initialState: DetailReducer.State(name: "tomoakiWeb",
-                                                              userDetailResponse: .mock(id: 1,
-                                                                                        login: "tomo",
-                                                                                        name: "full name",
-                                                                                        followers: 12,
-                                                                                        following: 6,
-                                                                                        publicRepos: 12)),
-                            reducer: {
-        DetailReducer()
-    }))
+    DetailView(
+        store: .init(initialState: DetailReducer.State(name: "tomoakiWeb"),
+            reducer: {
+                DetailReducer()
+                    .dependency(
+                        \.githubClient,
+                        .mock
+                    )
+            }
+        )
+    )
 }
