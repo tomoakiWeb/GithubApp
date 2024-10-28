@@ -6,6 +6,13 @@ GitHubのユーザーを閲覧できるクライアントアプリを取得す�
 ## 動作環境
 Xcode 16.0 Swift 6.0
 
+## 動作確認方法
+GitHub APIを利用するため、`Authorization` ヘッダーにaccess tokenの設定をお願い致します。
+
+```swift
+params["Authorization"] = "Bearer access token"
+```
+
 ## 追加機能、アイディア
 
 ### TCAアーキテクチャーの採用
