@@ -13,7 +13,7 @@ public struct DetailView: View {
     public var body: some View {
         ZStack {
             ScrollView {
-                LazyVStack {
+                LazyVStack(spacing: 0) {
                     if let userDetail = store.userDetail {
                         VStack {
                             UserDetailView(userDetail: userDetail)
@@ -22,7 +22,7 @@ public struct DetailView: View {
                     }
                     
                     ForEach(store.scope(
-                        state: \.filteredItems,
+                        state: \.items,
                         action: \.items
                     )) { itemStore in
                         

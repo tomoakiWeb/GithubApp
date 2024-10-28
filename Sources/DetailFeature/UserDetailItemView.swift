@@ -7,39 +7,45 @@ struct UserDetailItemView: View {
     @Bindable var store: StoreOf<UserDetailItemReducer>
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(store.userDetailItem.name)
-                .foregroundStyle(.primary)
-                .lineLimit(2)
-                .font(.title2)
-                .fontWeight(.bold)
-            
-            HStack(spacing: 8) {
-                HStack(spacing: 4) {
-                    Image(systemName: "star.fill")
-                        .foregroundStyle(.yellow)
-                    Text(store.userDetailItem.stargazersCount.formattedWithSuffix)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+        if store.userDetailItem.fork {
+            Rectangle()
+                .fill(.clear)
+                .frame(height: 0)
+        } else {
+            VStack(alignment: .leading) {
+                Text(store.userDetailItem.name)
+                    .foregroundStyle(.primary)
+                    .lineLimit(2)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                HStack(spacing: 8) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "star.fill")
+                            .foregroundStyle(.yellow)
+                        Text(store.userDetailItem.stargazersCount.formattedWithSuffix)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    if let language = store.userDetailItem.language {
+                        Text(language)
+                             .font(.subheadline)
+                             .foregroundColor(.secondary)
+                     }
                 }
                 
-                if let language = store.userDetailItem.language {
-                    Text(language)
-                         .font(.subheadline)
+                if let description = store.userDetailItem.description {
+                     Text(description)
+                         .font(.body)
                          .foregroundColor(.secondary)
+                         .lineLimit(3)
                  }
             }
-            
-            if let description = store.userDetailItem.description {
-                 Text(description)
-                     .font(.body)
-                     .foregroundColor(.secondary)
-                     .lineLimit(3)
-             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
     }
 }
 
@@ -75,6 +81,19 @@ struct UserDetailItemView: View {
                                                                                                                 fork: false,
                                                                                                                 description: "long description long description long description long description long description long description long description long description long description long description",
                                                                                                                 stargazersCount: 3,
+                                                                                                                language: "Swift",
+                                                                                                                htmlUrl: "https://github.com/tomoakiWeb/GithubApp"))),
+                                    reducer: {
+        UserDetailItemReducer()
+    }))
+}
+
+#Preview("fork true") {
+    UserDetailItemView(store: .init(initialState: UserDetailItemReducer.State(userDetailItem: .init(from: .mock(id: 1,
+                                                                                                                name: "repo name",
+                                                                                                                fork: true,
+                                                                                                                description: "description",
+                                                                                                                stargazersCount: 3300,
                                                                                                                 language: "Swift",
                                                                                                                 htmlUrl: "https://github.com/tomoakiWeb/GithubApp"))),
                                     reducer: {
